@@ -5,6 +5,7 @@ import (
 	"crypto/sha1"
 	"encoding/base64"
 	"fmt"
+	"github.com/rs/zerolog/log"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -21,12 +22,17 @@ func ValidateYubiKeyOTP(otp string) (bool, error) {
 		return false, fmt.Errorf("Yubico API credentials not configured")
 	}
 
+	nonce, err := GenerateNonce()
+	if err != nil {
+		log.Err(err).Msg("Error generating nonce")
+	}
+
 	// Prepare the API request
 	apiURL := "https://api.yubico.com/wsapi/2.0/verify"
 	query := url.Values{}
 	query.Set("id", clientID)
 	query.Set("otp", otp)
-	query.Set("nonce", GenerateNonce())
+	query.Set("nonce", nonce)
 
 	// Sign the request with HMAC-SHA1 using the secret key
 	signature := signYubiKeyRequest(query, secretKey)
