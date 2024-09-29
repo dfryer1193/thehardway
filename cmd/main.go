@@ -20,7 +20,6 @@ func main() {
 
 	// Attach middleware
 	router.Use(middleware.LoggingMiddleware())
-	router.Use(middleware.AuthMiddleware())
 	router.Use(gin.Recovery())
 
 	routes.SetupRoutes(router)

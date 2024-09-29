@@ -8,15 +8,11 @@ import (
 
 // SetupRoutes sets up the Gin router and routes
 func SetupRoutes(router *gin.Engine) {
-	// Post routes
-	router.POST("/posts", handlers.CreatePost)
+	// Public Post routes
 	router.GET("/posts", handlers.GetPublishedPosts)
-	router.PATCH("/posts/:id", handlers.UpdatePost)
 
 	// Comment routes
 	router.POST("/posts/:id/comments", handlers.AddComment)
-	router.DELETE("/comments/:id", handlers.DeleteComment)
-	router.POST("/ban", handlers.BanUser)
 
 	// Public routes for login and 2FA
 	router.GET("/challenge", handlers.LoginChallenge)
@@ -27,7 +23,11 @@ func SetupRoutes(router *gin.Engine) {
 	ownerRoutes := router.Group("/")
 	ownerRoutes.Use(middleware.AuthMiddleware())
 	{
+		ownerRoutes.POST("/posts", handlers.CreatePost)
+		ownerRoutes.PATCH("/posts/:id", handlers.UpdatePost)
 		ownerRoutes.POST("/change-password", handlers.ChangePassword)
+		ownerRoutes.DELETE("/comments/:id", handlers.DeleteComment)
+		ownerRoutes.POST("/ban", handlers.BanUser)
 		// Other protected routes (create post, delete comment, etc.)
 	}
 }
