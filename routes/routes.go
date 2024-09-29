@@ -19,8 +19,9 @@ func SetupRoutes(router *gin.Engine) {
 	router.POST("/ban", handlers.BanUser)
 
 	// Public routes for login and 2FA
-	router.POST("/login", handlers.PasswordLogin)
-	router.POST("/2fa", handlers.Complete2FA)
+	router.GET("/challenge", handlers.LoginChallenge)
+	router.POST("/login", handlers.Login)
+	router.POST("/2fa", handlers.YubiKeyVerification)
 
 	// Protected routes for the site owner (requires authentication)
 	ownerRoutes := router.Group("/")
