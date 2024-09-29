@@ -11,31 +11,26 @@ import (
 )
 
 func main() {
-	// Initialize logging
 	log.Logger = zerolog.New(os.Stderr).With().Timestamp().Logger()
 
-	// Load config
-	err := config.InitConfig()
-	if err != nil {
-		log.Fatal().Err(err).Msg("Unable to load config")
-	}
+	// Init config
+	config.LoadConfig()
 
-	// Set up Gin router
 	router := gin.Default()
 
 	// Attach middleware
 	router.Use(middleware.LoggingMiddleware())
+	router.Use(middleware.AuthMiddleware())
 	router.Use(gin.Recovery())
 
-	// Set up routes
 	routes.SetupRoutes(router)
 
-	// Run the server
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
 	}
-	err = router.Run(":" + port)
+
+	err := router.Run(":" + port)
 	if err != nil {
 		log.Fatal().Err(err).Msg("Unable to start server")
 	}
