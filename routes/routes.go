@@ -10,6 +10,7 @@ import (
 func SetupRoutes(router *gin.Engine) {
 	// Public Post routes
 	router.GET("/posts", handlers.GetPublishedPosts)
+	router.GET("/posts/:id", handlers.GetPost)
 
 	// Comment routes
 	router.POST("/posts/:id/comments", handlers.AddComment)

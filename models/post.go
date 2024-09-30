@@ -7,7 +7,7 @@ import (
 )
 
 type Post struct {
-	ID        uint      `json:"id" gorm:"primaryKey"`
+	ID        string    `json:"id" gorm:"primaryKey"`
 	Title     string    `json:"title"`
 	Content   string    `json:"content"`
 	Images    []string  `json:"images" gorm:"type:text[]"`
@@ -33,7 +33,7 @@ func UpdatePost(db *gorm.DB, post Post) error {
 }
 
 // GetPostByID fetches a post by ID
-func GetPostByID(db *gorm.DB, id uint) (Post, error) {
+func GetPostByID(db *gorm.DB, id string) (Post, error) {
 	var post Post
 	if err := db.First(&post, id).Error; err != nil {
 		return post, err

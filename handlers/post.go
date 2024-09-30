@@ -3,6 +3,7 @@ package handlers
 import (
 	"github.com/dfryer1193/thehardway/models"
 	"github.com/dfryer1193/thehardway/services"
+	"github.com/dfryer1193/thehardway/utils"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"net/http"
@@ -34,4 +35,18 @@ func GetPublishedPosts(c *gin.Context) {
 
 func UpdatePost(c *gin.Context) {
 	// Logic to update post state (draft/published)
+}
+
+// GetPost handles fetching a post by ID and renders the markdown content
+func GetPost(c *gin.Context) {
+	postID := c.Param("id")
+	post, err := models.GetPostByID(db, postID)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Post not found"})
+		return
+	}
+
+	html := utils.RenderMarkdown(post.Content)
+
+	c.Data(http.StatusOK, gin.MIMEHTML, []byte(html))
 }
