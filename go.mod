@@ -5,6 +5,7 @@ go 1.23.1
 require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/gin-gonic/gin v1.10.0
+	github.com/gomarkdown/markdown v0.0.0-20240930133441-72d49d9543d8
 	github.com/joho/godotenv v1.5.1
 	github.com/rs/zerolog v1.33.0
 	golang.org/x/crypto v0.23.0
